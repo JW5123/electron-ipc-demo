@@ -16,13 +16,19 @@ function createWindow() {
     win.webContents.openDevTools();
 
     let count = 1;
-    setInterval(() => {
+    const inervalID = setInterval(() => {
         if(win && !win.isDestroyed()) {
             const msg = `Hello World! ${count++}`;
             console.log('[Main] push message:', msg);
             win.webContents.send('push-message', msg);
+            
+            if(count > 5) {
+                clearInterval(inervalID);
+                console.log('[Main] Stopped pushing messages');
+                win.webContents.send('push-message', 'Push stopped');
+            }
         }
-    }, 3000);
+    }, 2000);
 }
 
 app.whenReady().then(createWindow);
